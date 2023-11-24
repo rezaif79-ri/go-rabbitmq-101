@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/streadway/amqp"
-	"gitlab.com/rezaif79.ri/go-rabbitmq-101/internal/rabbitdev"
+	"gitlab.com/rezaif79-ri/go-rabbitmq-101/internal/rabbitdev"
 )
 
 func main() {
