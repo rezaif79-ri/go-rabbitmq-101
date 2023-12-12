@@ -24,15 +24,30 @@ func main() {
 	}
 	defer channel.Close()
 
+	// declaring queue with its properties over the the channel opened
+	queue, err := channel.QueueDeclare(
+		"sendMessage", // name
+		false,         // durable
+		false,         // auto delete
+		false,         // exclusive
+		false,         // no wait
+		nil,           // args
+	)
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Println("check queue: ", queue)
+
 	// declaring consumer with its properties over channel opened
 	msgs, err := channel.Consume(
-		"testing", // queue
-		"",        // consumer
-		true,      // auto ack
-		false,     // exclusive
-		false,     // no local
-		false,     // no wait
-		nil,       //args
+		"sendMessage", // queue
+		"",            // consumer
+		true,          // auto ack
+		false,         // exclusive
+		false,         // no local
+		false,         // no wait
+		nil,           //args
 	)
 	if err != nil {
 		panic(err)
@@ -49,3 +64,5 @@ func main() {
 	fmt.Println("Waiting for messages...")
 	<-forever
 }
+
+// func sendMessageConsumer(*rabbitdev.RabbitMqDev)
