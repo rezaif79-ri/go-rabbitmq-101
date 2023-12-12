@@ -1,0 +1,55 @@
+services:
+  rabbitmq-dev:
+    image: rabbitmq:3-management-alpine
+    container_name: message-broker
+    ports:
+      - 5672:5672 # for sender and consumer connections
+      - 15672:15672 # for serve RabbitMQ GUI
+    volumes:
+      - ${HOME}/rabbitmq-dev/data/:/var/lib/rabbitmq
+      - ${HOME}/rabbitmq-dev/log/:/var/log/rabbitmq
+    restart: always
+    networks:
+      - dev-network
+
+  consumer:
+    build:
+      context: .
+      dockerfile: ./consumer.dockerfile
+    image: rezaif79-ri/consumer-app:0.1
+    container_name: consumer-app
+    environment:
+      RBMQ_HOST: rabbitmq-dev
+      RBMQ_PORT: 5672
+      RBMQ_USER: guest
+      RBMQ_PASSWORD: guest
+    ports:
+      - 3000:3000
+    depends_on:
+      - rabbitmq-dev
+    networks:
+      - dev-network
+
+  producer:
+    build:
+      context: .
+      dockerfile: ./producer.dockerfile
+    image: rezaif79-ri/producer-app:0.1
+    container_name: producer-app
+    environment:
+      RBMQ_HOST: rabbitmq-dev
+      RBMQ_PORT: 5672
+      RBMQ_USER: guest
+      RBMQ_PASSWORD: guest
+    ports:
+      - 8001:8001
+    depends_on:
+      - rabbitmq-dev
+      - consumer
+    networks:
+      - dev-network
+
+networks:
+  # Create a new Docker network.
+  dev-network:
+    driver: bridge
