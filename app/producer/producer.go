@@ -20,7 +20,9 @@ func main() {
 		rabbitdev.WithPort("5672"),
 	)
 
-	app := fiber.New()
+	app := fiber.New(fiber.Config{
+		EnablePrintRoutes: true,
+	})
 
 	app.Use(logger.New())
 
