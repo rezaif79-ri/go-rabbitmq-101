@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/gofiber/fiber/v2"
@@ -12,12 +13,25 @@ import (
 	"gitlab.com/rezaif79-ri/go-rabbitmq-101/internal/rabbitdev"
 )
 
+func getEnv(key string, fallback string) string {
+	if value, ok := os.LookupEnv(key); ok {
+		return value
+	}
+
+	return fallback
+}
+
 func main() {
+	var rbmqHost = getEnv("RBMQ_HOST", "localhost")
+	var rbmqPort = getEnv("RBMQ_PORT", "5672")
+	var rbmqUser = getEnv("RBMQ_USER", "guest")
+	var rbmqPassword = getEnv("RBMQ_PASSWORD", "guest")
+
 	var rbmd = rabbitdev.NewRabbitMqDevConn(
-		rabbitdev.WithUser("guest"),
-		rabbitdev.WithPassword("guest"),
-		rabbitdev.WithHost("localhost"),
-		rabbitdev.WithPort("5672"),
+		rabbitdev.WithUser(rbmqUser),
+		rabbitdev.WithPassword(rbmqPassword),
+		rabbitdev.WithHost(rbmqHost),
+		rabbitdev.WithPort(rbmqPort),
 	)
 
 	app := fiber.New(fiber.Config{
