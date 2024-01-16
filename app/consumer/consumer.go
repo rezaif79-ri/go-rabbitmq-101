@@ -2,18 +2,9 @@ package main
 
 import (
 	"fmt"
-	"os"
 
-	"gitlab.com/rezaif79-ri/go-rabbitmq-101/app/consumer/config"
+	"gitlab.com/rezaif79-ri/go-rabbitmq-101/app/config"
 )
-
-func getEnv(key string, fallback string) string {
-	if value, ok := os.LookupEnv(key); ok {
-		return value
-	}
-
-	return fallback
-}
 
 func main() {
 	rbmdConn := config.InitRabbitMqDevConn()
@@ -67,5 +58,3 @@ func main() {
 	fmt.Println("Waiting for messages...")
 	<-forever
 }
-
-// func sendMessageConsumer(*rabbitdev.RabbitMqDev)
