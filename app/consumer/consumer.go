@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"gitlab.com/rezaif79-ri/go-rabbitmq-101/internal/rabbitdev"
+	"gitlab.com/rezaif79-ri/go-rabbitmq-101/app/consumer/config"
 )
 
 func getEnv(key string, fallback string) string {
@@ -16,23 +16,12 @@ func getEnv(key string, fallback string) string {
 }
 
 func main() {
-	var rbmqHost = getEnv("RBMQ_HOST", "localhost")
-	var rbmqPort = getEnv("RBMQ_PORT", "5672")
-	var rbmqUser = getEnv("RBMQ_USER", "guest")
-	var rbmqPassword = getEnv("RBMQ_PASSWORD", "guest")
-
-	var rbmd = rabbitdev.NewRabbitMqDevConn(
-		rabbitdev.WithUser(rbmqUser),
-		rabbitdev.WithPassword(rbmqPassword),
-		rabbitdev.WithHost(rbmqHost),
-		rabbitdev.WithPort(rbmqPort),
-	)
-
-	rbmd.Connect()
-	defer rbmd.Connection.Close()
+	rbmdConn := config.InitRabbitMqDevConn()
+	rbmdConn.Connect()
+	defer rbmdConn.Connection.Close()
 
 	// opening a channel over the connection established to interact with RabbitMQ
-	channel, err := rbmd.Connection.Channel()
+	channel, err := rbmdConn.Connection.Channel()
 	if err != nil {
 		panic(err)
 	}
