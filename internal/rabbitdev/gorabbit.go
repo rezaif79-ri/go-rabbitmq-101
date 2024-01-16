@@ -49,3 +49,9 @@ func (rbmd *RabbitMqDev) Connect() {
 	}
 	rbmd.Connection = connection
 }
+
+func (rbmd *RabbitMqDev) Close() {
+	if err := rbmd.Connection.Close(); err != nil {
+		panic(err)
+	}
+}
