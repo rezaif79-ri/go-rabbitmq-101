@@ -6,9 +6,14 @@ services:
       - 5672:5672 # for sender and consumer connections
       - 15672:15672 # for serve RabbitMQ GUI
     volumes:
-      - ${HOME}/rabbitmq-dev/data/:/var/lib/rabbitmq
-      - ${HOME}/rabbitmq-dev/log/:/var/log/rabbitmq
+      - ./rabbitmq-dev/data/:/var/lib/rabbitmq
+      - ./rabbitmq-dev/log/:/var/log/rabbitmq
     restart: always
+    healthcheck:
+      test: rabbitmq-diagnostics check_port_connectivity
+      interval: 1s
+      timeout: 3s
+      retries: 30
     networks:
       - dev-network
 
@@ -26,7 +31,8 @@ services:
     ports:
       - 3000:3000
     depends_on:
-      - rabbitmq-dev
+      rabbitmq-dev:
+        condition: service_healthy
     networks:
       - dev-network
 
@@ -44,8 +50,9 @@ services:
     ports:
       - 8001:8001
     depends_on:
-      - rabbitmq-dev
-      - consumer
+      rabbitmq-dev:
+        condition: service_healthy
+
     networks:
       - dev-network
 
