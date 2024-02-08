@@ -53,6 +53,7 @@ func main() {
 		for msg := range msgs {
 			fmt.Println("cons tag:", msg.ConsumerTag)
 			fmt.Println("deliv tag:", msg.DeliveryTag)
+			fmt.Println("message id:", msg.MessageId)
 			fmt.Printf("Received Message: %s\n", msg.Body)
 		}
 	}()
