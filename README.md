@@ -2,9 +2,8 @@
 
 First encounter with wild rabbit mq in golang universe
 
-I use docker to run rabbitmq server with this step-by-step setup:
-- Run `docker pull rabbitmq:management` to pull the images
-- Once its ready, Run `docker run -d — name dev-rabbit — hostname rabbitmq-dev -p 15672:15672 -p 5672:5672 rabbitmq:management`
+I use docker to run rabbitmq server already been setup with docker compose
+just run `docker-compose up --build`
 
 ## Summary
 
