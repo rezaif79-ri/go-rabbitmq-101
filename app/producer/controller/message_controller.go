@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/google/uuid"
 	"github.com/streadway/amqp"
 	"gitlab.com/rezaif79-ri/go-rabbitmq-101/internal/rabbitdev"
 )
@@ -80,6 +81,7 @@ func (mc *MessageControllerImpl) SendMessageToServer(c *fiber.Ctx) error {
 		})
 	}
 
+	unique := uuid.New()
 	// publishing a message
 	err = channel.Publish(
 		"",            // exchange
@@ -89,6 +91,7 @@ func (mc *MessageControllerImpl) SendMessageToServer(c *fiber.Ctx) error {
 		amqp.Publishing{
 			ContentType: "application/json",
 			Body:        bodyBytes,
+			MessageId:   unique.String(),
 		},
 	)
 	if err != nil {
