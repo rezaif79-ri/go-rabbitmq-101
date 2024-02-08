@@ -12,4 +12,5 @@ func SetupMainRouter(router fiber.Router, rbmdConn *rabbitdev.RabbitMqDev) {
 	messageController := controller.InitMessageController(rbmdConn)
 
 	messageRoute.Post("", messageController.SendMessageToServer)
+	messageRoute.Post("v2", messageController.SendMessageToServerV2)
 }
