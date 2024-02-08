@@ -14,10 +14,16 @@ import (
 
 type MessageController interface {
 	SendMessageToServer(c *fiber.Ctx) error
+	SendMessageToServerV2(c *fiber.Ctx) error
 }
 
 type MessageControllerImpl struct {
 	rbmdConn *rabbitdev.RabbitMqDev
+}
+
+// SendMessageToServerV2 implements MessageController.
+func (*MessageControllerImpl) SendMessageToServerV2(c *fiber.Ctx) error {
+	panic("unimplemented")
 }
 
 func InitMessageController(conn *rabbitdev.RabbitMqDev) MessageController {
