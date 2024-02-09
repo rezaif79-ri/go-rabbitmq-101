@@ -19,49 +19,11 @@ func main() {
 	}
 	defer channel.Close()
 
-	// declaring queue with its properties over the the channel opened
-	queue, err := channel.QueueDeclare(
-		"sendMessageV2", // name
-		false,           // durable
-		false,           // auto delete
-		false,           // exclusive
-		false,           // no wait
-		nil,             // args
-	)
-	if err != nil {
-		panic(err)
-	}
-
-	fmt.Println("check queue v2: ", queue)
-
-	// declaring consumer with its properties over channel opened
-	msgsV2, err := channel.Consume(
-		"sendMessageV2", // queue
-		"",              // consumer
-		true,            // auto ack
-		false,           // exclusive
-		false,           // no local
-		false,           // no wait
-		nil,             //args
-	)
-	if err != nil {
-		panic(err)
-	}
-
 	// print consumed messages from queue
 	forever := make(chan bool)
 
 	queuehandler.SendMessageHandler(channel)
-
-	go func() {
-
-		for msg := range msgsV2 {
-			fmt.Println("V2 - cons tag:", msg.ConsumerTag)
-			fmt.Println("V2 - deliv tag:", msg.DeliveryTag)
-			fmt.Println("V2 - message id:", msg.MessageId)
-			fmt.Printf("V2 - Received Message: %s\n", msg.Body)
-		}
-	}()
+	queuehandler.SendMessageV2Handler(channel)
 
 	fmt.Println("Waiting for messages...")
 	<-forever
