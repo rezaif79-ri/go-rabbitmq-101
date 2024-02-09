@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"gitlab.com/rezaif79-ri/go-rabbitmq-101/app/config"
+	queuehandler "gitlab.com/rezaif79-ri/go-rabbitmq-101/app/consumer/queue_handler"
 )
 
 func main() {
@@ -20,21 +21,6 @@ func main() {
 
 	// declaring queue with its properties over the the channel opened
 	queue, err := channel.QueueDeclare(
-		"sendMessage", // name
-		false,         // durable
-		false,         // auto delete
-		false,         // exclusive
-		false,         // no wait
-		nil,           // args
-	)
-	if err != nil {
-		panic(err)
-	}
-
-	fmt.Println("check queue: ", queue)
-
-	// declaring queue with its properties over the the channel opened
-	queue, err = channel.QueueDeclare(
 		"sendMessageV2", // name
 		false,           // durable
 		false,           // auto delete
@@ -47,20 +33,6 @@ func main() {
 	}
 
 	fmt.Println("check queue v2: ", queue)
-
-	// declaring consumer with its properties over channel opened
-	msgs, err := channel.Consume(
-		"sendMessage", // queue
-		"",            // consumer
-		true,          // auto ack
-		false,         // exclusive
-		false,         // no local
-		false,         // no wait
-		nil,           //args
-	)
-	if err != nil {
-		panic(err)
-	}
 
 	// declaring consumer with its properties over channel opened
 	msgsV2, err := channel.Consume(
@@ -78,13 +50,10 @@ func main() {
 
 	// print consumed messages from queue
 	forever := make(chan bool)
+
+	queuehandler.SendMessageHandler(channel)
+
 	go func() {
-		for msg := range msgs {
-			fmt.Println("cons tag:", msg.ConsumerTag)
-			fmt.Println("deliv tag:", msg.DeliveryTag)
-			fmt.Println("message id:", msg.MessageId)
-			fmt.Printf("Received Message: %s\n", msg.Body)
-		}
 
 		for msg := range msgsV2 {
 			fmt.Println("V2 - cons tag:", msg.ConsumerTag)
