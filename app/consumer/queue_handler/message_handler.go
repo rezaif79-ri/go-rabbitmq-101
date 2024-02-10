@@ -6,7 +6,7 @@ import (
 	"github.com/streadway/amqp"
 )
 
-func SendMessageHandler(rbmqChan *amqp.Channel) error {
+func sendMessageHandler(rbmqChan *amqp.Channel) error {
 	// declaring queue with its properties over the the channel opened
 	_, err := rbmqChan.QueueDeclare(
 		"sendMessage", // name
@@ -46,7 +46,7 @@ func SendMessageHandler(rbmqChan *amqp.Channel) error {
 	return nil
 }
 
-func SendMessageV2Handler(rbmqChan *amqp.Channel) error {
+func sendMessageV2Handler(rbmqChan *amqp.Channel) error {
 	// declaring queue with its properties over the the channel opened
 	_, err := rbmqChan.QueueDeclare(
 		"sendMessageV2", // name
