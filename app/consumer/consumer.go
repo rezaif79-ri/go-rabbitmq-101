@@ -22,8 +22,9 @@ func main() {
 	// print consumed messages from queue
 	forever := make(chan bool)
 
-	queuehandler.SendMessageHandler(channel)
-	queuehandler.SendMessageV2Handler(channel)
+	if err := queuehandler.SetupRbmqHandler(channel); err != nil {
+		panic(err)
+	}
 
 	fmt.Println("Waiting for messages...")
 	<-forever
