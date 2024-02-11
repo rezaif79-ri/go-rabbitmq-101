@@ -1,4 +1,16 @@
 services:
+  mongo-dev:
+    image: mongo:latest
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongo mongo:27017/test --quiet
+      interval: 10s
+      timeout: 10s
+      retries: 5
+    
   rabbitmq-dev:
     image: rabbitmq:3-management-alpine
     container_name: message-broker
