@@ -6,10 +6,10 @@ import (
 )
 
 func InitRabbitMqDevConn() *rabbitdev.RabbitMqDev {
-	var rbmqHost = envutil.GetEenv("RBMQ_HOST", "localhost")
-	var rbmqPort = envutil.GetEenv("RBMQ_PORT", "5672")
-	var rbmqUser = envutil.GetEenv("RBMQ_USER", "guest")
-	var rbmqPassword = envutil.GetEenv("RBMQ_PASSWORD", "guest")
+	var rbmqHost = envutil.GetEnv("RBMQ_HOST", "localhost")
+	var rbmqPort = envutil.GetEnv("RBMQ_PORT", "5672")
+	var rbmqUser = envutil.GetEnv("RBMQ_USER", "guest")
+	var rbmqPassword = envutil.GetEnv("RBMQ_PASSWORD", "guest")
 
 	return rabbitdev.NewRabbitMqDevConn(
 		rabbitdev.WithUser(rbmqUser),
