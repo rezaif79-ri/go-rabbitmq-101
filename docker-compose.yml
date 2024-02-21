@@ -48,6 +48,25 @@ services:
     networks:
       - dev-network
 
+  consumer:
+    build:
+      context: .
+      dockerfile: ./alt-consumer.dockerfile
+    image: rezaif79-ri/alt-consumer-app:0.1
+    container_name: alt-consumer-app
+    environment:
+      RBMQ_HOST: rabbitmq-dev
+      RBMQ_PORT: 5672
+      RBMQ_USER: guest
+      RBMQ_PASSWORD: guest
+    ports:
+      - 3000:3000
+    depends_on:
+      rabbitmq-dev:
+        condition: service_healthy
+    networks:
+      - dev-network
+
   producer:
     build:
       context: .
